@@ -19,8 +19,14 @@ public enum RemComponentBuilder {
 
 		@Override
 		public RemComponent build(Node element, Orientation orientation, Stack<String> parentPath, FocusListener listener) {
-			RemComponent toggle = TextFieldBuilder.build(element, orientation, parentPath, listener);
-			toggle.setMessage("placeholder for toggle");
+			String elemId = DocumentHelper.getAttributeValue("elem", element).orElse("");
+			Stack<String> path = new Stack<String>();
+			path.addAll(parentPath);
+			path.push(elemId);
+			
+			RemToggle toggle = new RemToggle(identifierFromPath(path));
+			toggle.addFocusListener(listener);
+			toggle.setLabel(DocumentHelper.getAttributeValue("label", element).orElse(""));
 			return toggle;
 		}
 	},
@@ -113,10 +119,10 @@ public enum RemComponentBuilder {
 
 		@Override
 		public RemComponent build(Node element, Orientation orientation, Stack<String> parentPath, FocusListener listener) {
-			String groupId = DocumentHelper.getAttributeValue("elem", element).orElse("");
+			String elemId = DocumentHelper.getAttributeValue("elem", element).orElse("");
 			Stack<String> path = new Stack<String>();
 			path.addAll(parentPath);
-			path.push(groupId);
+			path.push(elemId);
 			
 			RemTextField text = new RemTextField(identifierFromPath(path));
 			text.addFocusListener(listener);
